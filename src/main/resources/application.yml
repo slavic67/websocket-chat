@@ -8,5 +8,12 @@ spring:
       database: chat_app
       authentication-database: admin
 
+  logging:
+    level:
+      org.springframework.web.socket: DEBUG
+      org.springframework.messaging: DEBUG
+      org.springframework.messaging.simp: DEBUG
+      org.springframework.messaging.simp.stomp: TRACE
+
 server:
   port: 8088
