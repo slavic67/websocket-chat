@@ -15,23 +15,30 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 import java.util.List;
 
 @Configuration
-@EnableWebSocketMessageBroker
+@EnableWebSocketMessageBroker //Включает поддержку STOMP messaging поверх WebSocket.
 public class WebsocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/user");
-        registry.setApplicationDestinationPrefixes("/app");
-        registry.setUserDestinationPrefix(("/user"));// registry.setUserDestinationPrefix("/user/{userId}/**");
+        registry.enableSimpleBroker(
+                "/topic", //общие
+                "/queue", //события
+                "/user" //персональные
+        );
+        //Включает встроенный брокер сообщений Spring
+        registry.setApplicationDestinationPrefixes("/app"); //сообщения с таким prefix идут в Spring controllers
+        registry.setUserDestinationPrefix(("/user")); //Это префикс персональных сообщений пользователю.
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+
+        registry.addEndpoint("/ws").withSockJS(); //Это endpoint подключения WebSocket
     }
 
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {
+        //если Content-Type не указан → считать JSON
         DefaultContentTypeResolver resolver = new DefaultContentTypeResolver();
         resolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
