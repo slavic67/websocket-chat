@@ -11,3 +11,6 @@ websocket
 | `@Header`              | получить header              |
 | `@Headers`             | получить все headers         |
 | `@DestinationVariable` | параметры destination        |
+
+Для тестирования в postman в глобальном окружении
+нужно объявить null_char через команду: pm.globals.set("NULL_CHAR", '\0')
